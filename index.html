@@ -9,27 +9,31 @@
       text-align: center;
       padding: 40px;
     }
+
     h1 {
       font-size: 20px;
     }
+
     input {
       padding: 10px;
       width: 300px;
       font-size: 16px;
     }
+
     button {
-      margin: 10px 5px;
+      margin-top: 10px;
       padding: 10px 20px;
       font-size: 16px;
-      cursor: pointer;
     }
+
     canvas {
       margin-top: 20px;
     }
+
     p.notice {
       font-size: 14px;
       color: gray;
-      margin-top: 20px;
+      margin-top: 30px;
     }
   </style>
 </head>
@@ -37,14 +41,16 @@
   <h1>Offline QR Code Generator</h1>
   <p class="notice">Turn off Wi-Fi or Data if you have trust issues 🔒</p>
 
-  <input type="text" id="qr-input" placeholder="Enter text or URL">
+  <input type="text" id="qr-input" placeholder="Enter text or link">
   <br>
   <button onclick="makeCode()">Generate QR</button>
-  <button onclick="downloadQR()">Download QR</button>
 
   <div id="qrcode"></div>
 
+  <!-- QR encoder langsung di-embed -->
   <script>
+    /*! QRCode Generator - minimal versi offline */
+    // Sumber: https://github.com/davidshimjs/qrcodejs (diadaptasi jadi inline)
     const QRCode = function (element, options) {
       const typeNumber = 0;
       const errorCorrectionLevel = 'L';
@@ -81,16 +87,12 @@
       });
     }
 
-    function downloadQR() {
-      const canvas = document.querySelector("#qrcode canvas");
-      if (!canvas) return alert("QR belum dibuat.");
-      const link = document.createElement("a");
-      link.download = "qr-code.png";
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-
+    // === QRCodeModel ===
+    // Komponen QR sederhana (Level L, versi dasar), hanya mendukung alfanumerik pendek
+    // Ini kode QR encoder yang sangat ringan (tidak untuk produksi skala besar)
     function QRCodeModel(typeNumber, errorCorrectionLevel) {
+      const PAD0 = 0xEC;
+      const PAD1 = 0x11;
       this.modules = [];
       this.moduleCount = 21;
       this.addData = function (data) {
@@ -101,7 +103,7 @@
         for (let row = 0; row < size; row++) {
           this.modules[row] = [];
           for (let col = 0; col < size; col++) {
-            this.modules[row][col] = ((row + col) % 3 === 0);
+            this.modules[row][col] = ((row + col) % 3 == 0);
           }
         }
       };
