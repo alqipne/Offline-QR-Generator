@@ -1,57 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Offline QR Generator for Seed Phrase</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 2rem;
-    }
-    #qrcode {
-      margin: 20px auto;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <title>Offline QR Code Generator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h2>Offline QR Generator</h2>
-  <p>Masukkan Seed Phrase:</p>
-  <textarea id="text" rows="4" cols="50" placeholder="Masukkan seed phrase..."></textarea><br><br>
-  <button onclick="generateQR()">Generate QR</button>
+  <h1>Offline QR Code Generator</h1>
+  <p>Enter any text or data you want to convert into a QR code.</p>
+
+  <textarea id="inputText" placeholder="Type or paste your text here..."></textarea>
+
+  <button id="generateBtn">Generate QR Code</button>
+  <button id="downloadBtn" style="display:none;">Download QR Code</button>
+
   <div id="qrcode"></div>
-  <button id="downloadBtn" onclick="downloadQR()" style="display:none;">Download QR Code</button>
 
-  <script>
-    let qr;
-
-    function generateQR() {
-      const text = document.getElementById("text").value;
-      document.getElementById("qrcode").innerHTML = ""; // Clear previous
-      if (!text) return;
-
-      qr = new QRCode(document.getElementById("qrcode"), {
-        text: text,
-        width: 256,
-        height: 256
-      });
-
-      // Tampilkan tombol download
-      setTimeout(() => {
-        document.getElementById("downloadBtn").style.display = "inline-block";
-      }, 500); // Delay untuk memastikan QR ter-render
-    }
-
-    function downloadQR() {
-      const img = document.querySelector("#qrcode img");
-      if (img) {
-        const link = document.createElement('a');
-        link.href = img.src;
-        link.download = "seedphrase_qr.png";
-        link.click();
-      }
-    }
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
