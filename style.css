@@ -1,0 +1,73 @@
+/* Reset & base styles */
+* {
+  box-sizing: border-box;
+}
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+h1 {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #111827;
+}
+p {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+textarea {
+  width: 100%;
+  max-width: 400px;
+  min-height: 100px;
+  padding: 12px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+button {
+  margin-top: 15px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+#qrcode {
+  margin-top: 30px;
+  width: 256px;
+  height: 256px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
+}
