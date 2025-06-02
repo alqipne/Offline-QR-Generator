@@ -2,111 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Offline QR Generator</title>
+  <title>Offline QR Generator for Seed Phrase</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       text-align: center;
-      padding: 40px;
+      padding: 2rem;
     }
-
-    h1 {
-      font-size: 20px;
-    }
-
-    input {
-      padding: 10px;
-      width: 300px;
-      font-size: 16px;
-    }
-
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-    }
-
-    canvas {
-      margin-top: 20px;
-    }
-
-    p.notice {
-      font-size: 14px;
-      color: gray;
-      margin-top: 30px;
+    #qrcode {
+      margin: 20px auto;
     }
   </style>
 </head>
 <body>
-  <h1>Offline QR Code Generator</h1>
-  <p class="notice">Turn off Wi-Fi or Data if you have trust issues 🔒</p>
-
-  <input type="text" id="qr-input" placeholder="Enter text or link">
-  <br>
-  <button onclick="makeCode()">Generate QR</button>
-
+  <h2>Offline QR Generator</h2>
+  <p>Masukkan Seed Phrase:</p>
+  <textarea id="text" rows="4" cols="50" placeholder="Masukkan seed phrase..."></textarea><br><br>
+  <button onclick="generateQR()">Generate QR</button>
   <div id="qrcode"></div>
+  <button id="downloadBtn" onclick="downloadQR()" style="display:none;">Download QR Code</button>
 
-  <!-- QR encoder langsung di-embed -->
   <script>
-    /*! QRCode Generator - minimal versi offline */
-    // Sumber: https://github.com/davidshimjs/qrcodejs (diadaptasi jadi inline)
-    const QRCode = function (element, options) {
-      const typeNumber = 0;
-      const errorCorrectionLevel = 'L';
-      const qrcode = new QRCodeModel(typeNumber, errorCorrectionLevel);
-      qrcode.addData(options.text);
-      qrcode.make();
+    let qr;
 
-      const size = options.width || 128;
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      const cells = qrcode.modules;
-      const cellSize = size / cells.length;
+    function generateQR() {
+      const text = document.getElementById("text").value;
+      document.getElementById("qrcode").innerHTML = ""; // Clear previous
+      if (!text) return;
 
-      canvas.width = canvas.height = size;
-      for (let row = 0; row < cells.length; row++) {
-        for (let col = 0; col < cells.length; col++) {
-          ctx.fillStyle = cells[row][col] ? '#000' : '#fff';
-          ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
-        }
-      }
-
-      element.innerHTML = '';
-      element.appendChild(canvas);
-    };
-
-    function makeCode() {
-      const input = document.getElementById("qr-input").value;
-      if (!input) return;
-      const el = document.getElementById("qrcode");
-      QRCode(el, {
-        text: input,
-        width: 200,
-        height: 200
+      qr = new QRCode(document.getElementById("qrcode"), {
+        text: text,
+        width: 256,
+        height: 256
       });
+
+      // Tampilkan tombol download
+      setTimeout(() => {
+        document.getElementById("downloadBtn").style.display = "inline-block";
+      }, 500); // Delay untuk memastikan QR ter-render
     }
 
-    // === QRCodeModel ===
-    // Komponen QR sederhana (Level L, versi dasar), hanya mendukung alfanumerik pendek
-    // Ini kode QR encoder yang sangat ringan (tidak untuk produksi skala besar)
-    function QRCodeModel(typeNumber, errorCorrectionLevel) {
-      const PAD0 = 0xEC;
-      const PAD1 = 0x11;
-      this.modules = [];
-      this.moduleCount = 21;
-      this.addData = function (data) {
-        this.data = data;
-      };
-      this.make = function () {
-        const size = this.moduleCount;
-        for (let row = 0; row < size; row++) {
-          this.modules[row] = [];
-          for (let col = 0; col < size; col++) {
-            this.modules[row][col] = ((row + col) % 3 == 0);
-          }
-        }
-      };
+    function downloadQR() {
+      const img = document.querySelector("#qrcode img");
+      if (img) {
+        const link = document.createElement('a');
+        link.href = img.src;
+        link.download = "seedphrase_qr.png";
+        link.click();
+      }
     }
   </script>
 </body>
